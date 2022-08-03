@@ -113,14 +113,14 @@ public class UserFollowingService {
         }
         return fanList;
     }
-
+    //添加分组
     public Long addUserFollowingGroups(FollowingGroup followingGroup) {
         followingGroup.setCreateTime(new Date());
         followingGroup.setType(UserConstant.USER_FOLLOWING_GROUP_TYPE_USER);
         followingGroupService.addFollowingGroup(followingGroup);
         return followingGroup.getId();
     }
-
+    //获取分组
     public List<FollowingGroup> getUserFollowingGroups(Long userId) {
         return followingGroupService.getUserFollowingGroups(userId);
     }
