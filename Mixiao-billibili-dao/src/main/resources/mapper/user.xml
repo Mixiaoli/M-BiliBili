@@ -68,4 +68,43 @@
         where
             userId = #{userId}
     </select>
+
+    <update id="updateUserInfos" parameterType="com.Mixiao.bilibili.domain.UserInfo">
+        update
+        t_user_info
+        set
+        <if test="nick != null and nick != '' ">
+            nick = #{nick},
+        </if>
+        <if test="avatar != null">
+            avatar = #{avatar},
+        </if>
+        <if test="sign != null">
+            sign = #{sign},
+        </if>
+        <if test="birth != null and birth != '' ">
+            birth = #{birth},
+        </if>
+        <if test="gender != null and gender != '' ">
+            gender = #{gender},
+        </if>
+        updateTime = #{updateTime}
+        where
+        userId = #{userId}
+    </update>
+
+    <select id="getUserInfoByUserIds" resultType="com.Mixiao.bilibili.domain.UserInfo">
+        select
+        *
+        from
+        t_user_info
+        where
+        1=1
+        <if test="userIdList != null and userIdList.size > 0">
+            and userId in
+            <foreach collection="userIdList" item = "userId" index="index" open="(" close=")" separator=",">
+                #{userId}
+            </foreach>
+        </if>
+    </select>
 </mapper>

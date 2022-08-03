@@ -3,6 +3,7 @@ package com.Mixiao.bilibili.api;
 import com.Mixiao.bilibili.api.support.UserSupport;
 import com.Mixiao.bilibili.domain.JsonResponse;
 import com.Mixiao.bilibili.domain.User;
+import com.Mixiao.bilibili.domain.UserInfo;
 import com.Mixiao.bilibili.service.UserService;
 import com.Mixiao.bilibili.service.util.RSAUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,5 +42,13 @@ public class UserApi {
     public JsonResponse<String> login(@RequestBody User user) throws Exception{
         String token = userService.login(user);
         return new JsonResponse<>(token);
+    }
+    //更改用户信息
+    @GetMapping("user-infos")
+    public JsonResponse<String> updateUserInfos(@RequestBody UserInfo userInfo){
+        Long userId = userSupport.getCurrentUserId();
+        userInfo.setUserId(userId);
+        userService.updateUserInfos(userInfo);
+        return JsonResponse.success();
     }
 }
