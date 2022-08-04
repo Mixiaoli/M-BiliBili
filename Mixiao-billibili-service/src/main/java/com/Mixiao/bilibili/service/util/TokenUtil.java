@@ -25,6 +25,16 @@ public class TokenUtil {
                 .withExpiresAt(calendar.getTime())//这个是JWT过期时间
                 .sign(algorithm);  //生成签名
     }
+    public static String generateRefreshToken(Long userId) throws Exception{
+        Algorithm algorithm = Algorithm.RSA256(RSAUtil.getPublicKey(), RSAUtil.getPrivateKey());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.DAY_OF_MONTH, 7);
+        return JWT.create().withKeyId(String.valueOf(userId))
+                .withIssuer(ISSUER)
+                .withExpiresAt(calendar.getTime())
+                .sign(algorithm);
+    }
     //校验 Long -> userid
     public static Long verifyToken(String token){
         try{

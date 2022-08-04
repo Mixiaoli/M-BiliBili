@@ -69,6 +69,33 @@
             userId = #{userId}
     </select>
 
+    <update id="updateUsers" parameterType="com.Mixiao.bilibili.domain.User">
+        update
+        t_user
+        set
+        <if test="phone != null and phone != '' ">
+            phone = #{phone},
+        </if>
+        <if test="email != null and email != '' ">
+            email = #{email},
+        </if>
+        <if test="password != null and password != '' ">
+            password = #{password},
+        </if>
+        updateTime = #{updateTime}
+        where
+        id = #{id}
+    </update>
+
+    <select id="getUserByPhoneOrEmail" parameterType="java.lang.String" resultType="com.Mixiao.bilibili.domain.User">
+        select
+            *
+        from
+            t_user
+        where
+            phone = #{phone} or email = #{email}
+    </select>
+
     <update id="updateUserInfos" parameterType="com.Mixiao.bilibili.domain.UserInfo">
         update
         t_user_info
@@ -107,4 +134,72 @@
             </foreach>
         </if>
     </select>
+
+    <select id="pageCountUserInfos" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select
+        count(1)
+        from
+        t_user_info
+        where
+        1=1
+        <if test="nick != null and nick != '' ">
+            and nick like '%${nick}%'
+        </if>
+    </select>
+
+    <select id="pageListUserInfos" parameterType="java.util.Map" resultType="com.Mixiao.bilibili.domain.UserInfo">
+        select
+        *
+        from
+        t_user_info
+        where
+        1=1
+        <if test="nick != null and nick != '' ">
+            and nick like '%${nick}%'
+        </if>
+        order by id desc
+        limit #{start}, #{limit}
+    </select>
+
+    <delete id="deleteRefreshToken">
+        delete from
+            t_refresh_token
+        where
+            refreshToken = #{refreshToken}
+    </delete>
+
+    <insert id="addRefreshToken">
+        insert into
+            t_refresh_token(
+            refreshToken,
+            userId,
+            createTime
+        )values(
+                   #{refreshToken},
+                   #{userId},
+                   #{createTime}
+               )
+    </insert>
+
+    <select id="getRefreshTokenDetail" parameterType="java.lang.String" resultType="com.Mixiao.bilibili.domain.RefreshTokenDetail">
+        select
+            *
+        from
+            t_refresh_token
+        where
+            refreshToken = #{refreshToken}
+    </select>
+
+    <select id="batchGetUserInfoByUserIds" resultType="com.Mixiao.bilibili.domain.UserInfo">
+        select
+        *
+        from
+        t_user_info
+        where
+        userId in
+        <foreach collection="userIdList" item="userId" open="(" close=")" separator=",">
+            #{userId}
+        </foreach>
+    </select>
+
 </mapper>

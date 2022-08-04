@@ -25,8 +25,8 @@ public class UserMomentsApi {
     private UserSupport userSupport;
 
 
-    @ApiLimitedRole(limitedRoleCodeList = {AuthRoleConstant.ROLE_LV0})
-    @DataLimited
+    @ApiLimitedRole(limitedRoleCodeList = {AuthRoleConstant.ROLE_LV0})//使用aop 权限
+    @DataLimited//数据库权限控制 用来判断字段传进来是否正确
     @PostMapping("/user-moments")
     public JsonResponse<String> addUserMoments(@RequestBody UserMoment userMoment) throws Exception {
         Long userId = userSupport.getCurrentUserId();
